@@ -6,11 +6,11 @@ require "everdone/version"
 require 'awesome_print'
 require 'time'
 
-require 'everdone/config.rb'
-require 'everdone/evernote.rb'
-require 'everdone/enmlformatter.rb'
-require 'everdone/todoist.rb'
-require 'sync.rb'
+require 'everdone/config'
+require 'everdone/evernote'
+require 'everdone/enmlformatter'
+require 'everdone/todoist'
+require 'sync'
 
 
 module Everdone
