@@ -2,11 +2,13 @@ require 'everdone'
 
 require 'minitest/autorun'
 
-require 'everdone/enmlformatter.rb'
+require 'everdone/config'
+require 'everdone/enmlformatter'
 
 class EnmlFormatterTest < MiniTest::Unit::TestCase
     def setup
-        @targ = Everdone::EnmlFormatter.new
+        config = Everdone::Config.new("lib/everdone/default_config.json", "#{Dir.home}/.everdone")
+        @targ = Everdone::EnmlFormatter.new(config)
     end
 
     def test_text
@@ -50,6 +52,6 @@ class EnmlFormatterTest < MiniTest::Unit::TestCase
 
     TESTING_DATETIME_FORMAT = "%a %e %b %Y %H:%M:%S %z"
     def test_datetimeToString
-        assert_equal "Mon 10 Mar 2014 08:45", Everdone::EnmlFormatter.datetimeToString("Mon 10 Mar 2014 15:45:01 +0000", TESTING_DATETIME_FORMAT)
+        assert_equal "Mon 10 Mar 2014 08:45", @targ.datetimeToString("Mon 10 Mar 2014 15:45:01 +0000", TESTING_DATETIME_FORMAT)
     end
 end

@@ -4,7 +4,7 @@
 #
 require 'awesome_print'
 
-require 'config.rb'
+require 'everdone/config'
 
 module Everdone
     class TodoNote
@@ -19,7 +19,8 @@ module Everdone
 
     class TodoItem
         attr_reader :id, :title, :created, :projects, :project_ids, :labels, :notes
-        def initialize(todoistItem, projects, labels)
+        def initialize(config, todoistItem, projects, labels)
+            @config = config
             item = todoistItem
             @id = item['id']
             @title = item['content']
@@ -41,16 +42,16 @@ module Everdone
         end
 
         def cleanTitle()
-            cleaned_title = @title.match(TODOIST_LINK_TITLE_REGEX)
+            cleaned_title = @title.match(@config.todoist_link_title_regex)
             @title = cleaned_title.nil? ? @title : cleaned_title[1].strip
         end
 
         def getProjectURL(project_index)
-            return TODOIST_PROJECT_URL + @project_ids[project_index].to_s
+            return @config.todoist_project_url + @project_ids[project_index].to_s
         end
 
         def getLabelURL(label)
-            return TODOIST_LABEL_URL + label
+            return @config.todoist_label_url + label
         end
     end
 end

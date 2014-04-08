@@ -6,19 +6,22 @@ require "everdone/version"
 require 'awesome_print'
 require 'time'
 
+# Everdone local stuff
 require 'everdone/config'
 require 'everdone/evernote'
 require 'everdone/enmlformatter'
 require 'everdone/todoist'
-require 'sync'
+require 'everdone/sync'
 
 
 module Everdone
-    @@config = Config.new("everdone/default_config.json", "#{Dir.home}/.everdone")
-    @@evernote = Evernote.new
-    @@todoist = Todoist.new
+    def self.init
+        @@config = Config.new("everdone/default_config.json", "#{Dir.home}/.everdone")
+        @@evernote = Evernote.new(@@config)
+        @@todoist = Todoist.new(@@config)
+    end
 
-    def get_notebook_from_project(project)
+    def self.get_notebook_from_project(project)
         notebook = @@config.todoist_evernote_map[project]  # It is possible the project is in the map but the value is nil.  This means: don't add items from this project to Evernote
         if not @@config.todoist_evernote_map.has_key?(project)  # If the project is not in the map at all then put it in the default notebook
             notebook = @@config.default_notebook
@@ -27,7 +30,9 @@ module Everdone
     end
 
     def self.sync
-        sync = Sync.new(@@todoist)
+        self.init
+        
+        sync = Sync.new(@@config, @@todoist)
 
         items = @@todoist.getCompletedItems()
         puts "INFO: Returned #{items.length} items"
@@ -38,14 +43,14 @@ module Everdone
             if not sync.isAlreadyProcessed(item.id)
                 # Map the project to an Evernote notebook
                 notebook = get_notebook_from_project(item.projects[0])
-                find_count = evernote.findNoteCounts("#{@@config.todoist_content_tag}#{item.id}", notebook) if notebook
+                find_count = @@evernote.findNoteCounts("#{@@config.todoist_content_tag}#{item.id}", notebook) if notebook
                 if notebook.nil?
                     excluded.push(item.id)
                 elsif find_count > 0
                     found.push(item.id)
                 else  # not already processed nor in an ignored project nor was it found in Evernote.  Make a new one!
                     # Create the note's content
-                    content = EnmlFormatter.new
+                    content = EnmlFormatter.new(@@config)
                     content.text("Project: ").link(item.projects[0], item.getProjectURL(0))
                     if item.labels.length > 0
                         content.space.space.space.space
@@ -56,7 +61,7 @@ module Everdone
                     end
                     content.space.space.space.text("#{@@config.todoist_content_tag}#{item.id}")
                     item.notes.each { |note|  
-                        content.h3("Note created #{EnmlFormatter.datetimeToString(note.created, @@config.todoist_datetime_format)}   [Todoist note id: #{note.id}]")
+                        content.h3("Note created #{content.datetimeToString(note.created, @@config.todoist_datetime_format)}   [Todoist note id: #{note.id}]")
                         content.rawtext(note.content)
                     }
 

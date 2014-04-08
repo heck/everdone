@@ -2,7 +2,7 @@ require 'cgi'
 require 'time'
 require 'awesome_print'
 
-require 'config.rb'
+require 'everdone/config'
 
 #
 # Class to help create the ENML (EverNote Markup Language) content
@@ -12,7 +12,8 @@ module Everdone
     class EnmlFormatter
         attr_reader :body
 
-        def initialize()
+        def initialize(config)
+            @config = config
             @body = ""
         end
 
@@ -79,8 +80,8 @@ module Everdone
             return self
         end
 
-        def self.datetimeToString(text, sourceFormat)
-            return DateTime.strptime(text, sourceFormat).new_offset(DateTime.now.offset).strftime(EVERNOTE_DATETIME_FORMAT)
+        def datetimeToString(text, sourceFormat)
+            return DateTime.strptime(text, sourceFormat).new_offset(DateTime.now.offset).strftime(@config.evernote_datetime_format)
         end
 
         def datetime(text, sourceFormat)

@@ -1,27 +1,14 @@
 require 'httparty'
 require 'awesome_print'
 
-require 'config.rb'
+require 'everdone/config'
 
-require 'everdone/todoItem.rb'
+require 'everdone/todoItem'
 
 module Everdone
     class Todoist
-        # helper function for making RESTful calls
-        def callAPI(url, params=nil)
-            query = { 'token' => TODOIST_TOKEN }
-            query.merge!(params) if params
-            ret = HTTParty.post(url, {
-              :query => query
-            })
-
-            if ret.response.code != "200"
-              raise "ERROR: Error calling Todoist API #{url}\n   Response Code: #{ret.response.code}\n  Response: \n#{ret.response.body}"
-            end
-            return ret
-        end
-
-        def initialize()
+        def initialize(config)
+            @config = config
             @projects = {}  # map of project id's to project names
             @project_id_by_name = {}  # map of project names to id's
             projects = self.callAPI('https://todoist.com/API/getProjects')
@@ -34,6 +21,20 @@ module Everdone
             labels.each { |label|  
                 @labels[label[1]['id']] = label[1]['name']
             }
+        end
+
+        # helper function for making RESTful calls
+        def callAPI(url, params=nil)
+            query = { 'token' => @config.todoist_token }
+            query.merge!(params) if params
+            ret = HTTParty.post(url, {
+              :query => query
+            })
+
+            if ret.response.code != "200"
+              raise "ERROR: Error calling Todoist API #{url}\n   Response Code: #{ret.response.code}\n  Response: \n#{ret.response.body}"
+            end
+            return ret
         end
 
         def addItemToProjectByName(project_name, content, priority)
@@ -49,10 +50,10 @@ module Everdone
 
         def getCompletedItems()
             ret = [] # list of completed items converted into TodoItem objects
-            interval = TODOIST_COMPLETED_ITEMS_WINDOW
+            interval = @config.todoist_completed_window
             items = self.callAPI('https://todoist.com/API/getAllCompletedItems', params={'interval'=>interval})
             items['items'].each { |item|  
-                todoItem = TodoItem.new(item, @projects, @labels)
+                todoItem = TodoItem.new(@config, item, @projects, @labels)
                 ret.push(todoItem)
             }
             return ret
