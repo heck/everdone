@@ -1,0 +1,10 @@
+{
+    "string_1": "this is string_1",
+    "string_2": "this is string_2",
+    "int_1": 1,
+    "float_1": 1.1,
+    "string_array_1": ["first_string", "second_string"],
+    "hash_1": { 
+        "key_1":"value 1", "key_2":2 
+    }
+}

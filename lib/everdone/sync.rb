@@ -58,5 +58,5 @@ module Everdone
         def unmarshall(data)
             @data = JSON.parse(data)
         end
-end
+    end
 end

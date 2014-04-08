@@ -1,0 +1,7 @@
+{
+    "string_2": "this is THE NEW string_2",
+    "float_1": 2.2,
+    "hash_1": { 
+        "key_1":"value replaced", "key_2":3 
+    }
+}

@@ -6,22 +6,22 @@ require "everdone/version"
 require 'awesome_print'
 require 'time'
 
-require 'config.rb'
-
+require 'everdone/config.rb'
 require 'everdone/evernote.rb'
 require 'everdone/enmlformatter.rb'
 require 'everdone/todoist.rb'
-require 'everdone/sync.rb'
+require 'sync.rb'
 
 
 module Everdone
+    @@config = Config.new("everdone/default_config.json", "#{Dir.home}/.everdone")
     @@evernote = Evernote.new
     @@todoist = Todoist.new
 
     def get_notebook_from_project(project)
-        notebook = TODOIST_PROJECT_TO_EVERNOTE_NOTEBOOK_MAP[project]  # It is possible the project is in the map but the value is nil.  This means: don't add items from this project to Evernote
-        if not TODOIST_PROJECT_TO_EVERNOTE_NOTEBOOK_MAP.has_key?(project)  # If the project is not in the map at all then put it in the default notebook
-            notebook = EVERNOTE_DEFAULT_NOTEBOOK
+        notebook = @@config.todoist_evernote_map[project]  # It is possible the project is in the map but the value is nil.  This means: don't add items from this project to Evernote
+        if not @@config.todoist_evernote_map.has_key?(project)  # If the project is not in the map at all then put it in the default notebook
+            notebook = @@config.default_notebook
         end
         return notebook
     end
@@ -38,7 +38,7 @@ module Everdone
             if not sync.isAlreadyProcessed(item.id)
                 # Map the project to an Evernote notebook
                 notebook = get_notebook_from_project(item.projects[0])
-                find_count = evernote.findNoteCounts("#{TODOIST_CONTENT_TAG}#{item.id}", notebook) if notebook
+                find_count = evernote.findNoteCounts("#{@@config.todoist_content_tag}#{item.id}", notebook) if notebook
                 if notebook.nil?
                     excluded.push(item.id)
                 elsif find_count > 0
@@ -54,9 +54,9 @@ module Everdone
                             content.link(label, item.getLabelURL(label)).space 
                         }
                     end
-                    content.space.space.space.text("#{TODOIST_CONTENT_TAG}#{item.id}")
+                    content.space.space.space.text("#{@@config.todoist_content_tag}#{item.id}")
                     item.notes.each { |note|  
-                        content.h3("Note created #{EnmlFormatter.datetimeToString(note.created, TODOIST_DATETIME_FORMAT)}   [Todoist note id: #{note.id}]")
+                        content.h3("Note created #{EnmlFormatter.datetimeToString(note.created, @@config.todoist_datetime_format)}   [Todoist note id: #{note.id}]")
                         content.rawtext(note.content)
                     }
 
@@ -64,7 +64,7 @@ module Everdone
                     @@evernote.createNote(item.title, 
                         content.to_s, 
                         notebook,
-                        Evernote.convertTextToTimestamp(item.created, TODOIST_DATETIME_FORMAT))
+                        Evernote.convertTextToTimestamp(item.created, @@config.todoist_datetime_format))
                 end
                 processed.push(item.id)  # whether item was added to Evernote or not don't process it again.
             end

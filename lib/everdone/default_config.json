@@ -1,0 +1,19 @@
+{
+    "default_notebook" : "<set to one of your Evernote notebooks>",
+    "tag" : "Todoist",
+    "evernote_datetime_format" : "%a %e %b %Y %H:%M",
+    "use_evernote_sandbox" : false,
+    "evernote_token" : "<set to your Evernote developer token>",
+
+    "todoist_token" : "<set to your Todoist API token>",
+    "todoist_completed_window" : "past 2 weeks",
+    "todoist_datetime_format" : "%a %e %b %Y %H:%M:%S %z",
+    "todoist_project_url" : "https://todoist.com/app?v=204#project/",
+    "todoist_label_url" : "https://todoist.com/app?v=204#agenda/@",
+    "todoist_sync_tracking_project" : "EvernoteSync",
+    "todoist_content_tag" : "TodoistItemId",
+    "todoist_link_title_regex" : "/\[\[[\w\s]+=[\h]+\s*,\s*([ -~]+)\]\]/",
+
+    "todoist_evernote_map" : {
+    }
+}
