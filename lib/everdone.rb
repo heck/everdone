@@ -16,7 +16,7 @@ require 'everdone/sync'
 
 module Everdone
     def self.init
-        @@config = Config.new("everdone/default_config.json", "#{Dir.home}/.everdone")
+        @@config = Config.new(File.expand_path("../everdone/default_config.json", __FILE__), "#{Dir.home}/.everdone")
         @@evernote = Evernote.new(@@config)
         @@todoist = Todoist.new(@@config)
     end
