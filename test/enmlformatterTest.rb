@@ -52,6 +52,6 @@ class EnmlFormatterTest < MiniTest::Unit::TestCase
 
     TESTING_DATETIME_FORMAT = "%a %e %b %Y %H:%M:%S %z"
     def test_datetimeToString
-        assert_equal "Mon 10 Mar 2014 08:45", @targ.datetimeToString("Mon 10 Mar 2014 15:45:01 +0000", TESTING_DATETIME_FORMAT)
+        assert_equal "Mon 10 Mar 2014 08:45", @targ.datetime_to_string("Mon 10 Mar 2014 15:45:01 +0000", TESTING_DATETIME_FORMAT)
     end
 end

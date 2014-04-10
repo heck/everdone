@@ -1,6 +1,8 @@
 #
 # Class to handle reading, writing, and encapsulating JSON-based app config
 
+# TODO: Preflight check vs. config.  Tokens work?  Projects, notebooks, tags needed all there?
+
 require 'json'
 
 module Everdone

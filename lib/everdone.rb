@@ -1,8 +1,5 @@
 require "everdone/version"
 
-# TODO: Turn this into a gem.  Gemspec, etc. see: http://yehudakatz.com/2010/04/02/using-gemspecs-as-intended/ and http://guides.rubygems.org/what-is-a-gem/
-# TODO: Refactor to GitHub Ruby coding standards: https://github.com/styleguide/ruby
-# TODO: Preflight check vs. config.  Tokens work?  Projects, notebooks, tags needed all there?
 require 'awesome_print'
 require 'time'
 
@@ -12,7 +9,6 @@ require 'everdone/evernote'
 require 'everdone/enmlformatter'
 require 'everdone/todoist'
 require 'everdone/sync'
-
 
 module Everdone
     def self.init
@@ -34,42 +30,42 @@ module Everdone
         
         sync = Sync.new(@@config, @@todoist)
 
-        items = @@todoist.getCompletedItems()
+        items = @@todoist.get_completed_items()
         puts "INFO: Returned #{items.length} items"
         processed = []  # list of Todoist item ids that were processed
         found = []  # list of Todoist item ids not in the already processed list but subsequently found in Evernote
         excluded = [] # a list of Todoist item ids that were not added because they belong to a project that is blacklisted
         items.each { |item|
-            if not sync.isAlreadyProcessed(item.id)
+            if not sync.is_already_processed(item.id)
                 # Map the project to an Evernote notebook
                 notebook = get_notebook_from_project(item.projects[0])
-                find_count = @@evernote.findNoteCounts("#{@@config.todoist_content_tag}#{item.id}", notebook) if notebook
+                find_count = @@evernote.find_note_counts("#{@@config.todoist_content_tag}#{item.id}", notebook) if notebook
                 if notebook.nil?
-                    excluded.push(item.id)
+                    excluded.push(item.id)  # project did not map to any notebook => don't add to Evernote
                 elsif find_count > 0
-                    found.push(item.id)
+                    found.push(item.id)  # Todoist item already in Evernote => don't add
                 else  # not already processed nor in an ignored project nor was it found in Evernote.  Make a new one!
                     # Create the note's content
                     content = EnmlFormatter.new(@@config)
-                    content.text("Project: ").link(item.projects[0], item.getProjectURL(0))
+                    content.text("Project: ").link(item.projects[0], item.get_project_url(0))
                     if item.labels.length > 0
                         content.space.space.space.space
                         content.text("Labels: ")
                         item.labels.each { |label| 
-                            content.link(label, item.getLabelURL(label)).space 
+                            content.link(label, item.get_label_url(label)).space 
                         }
                     end
                     content.space.space.space.text("#{@@config.todoist_content_tag}#{item.id}")
                     item.notes.each { |note|  
-                        content.h3("Note created #{content.datetimeToString(note.created, @@config.todoist_datetime_format)}   [Todoist note id: #{note.id}]")
+                        content.h3("Note created #{content.datetime_to_string(note.created, @@config.todoist_datetime_format)}   [Todoist note id: #{note.id}]")
                         content.rawtext(note.content)
                     }
 
                     # Create the note in Evernote
-                    @@evernote.createNote(item.title, 
+                    @@evernote.create_note(item.title, 
                         content.to_s, 
                         notebook,
-                        Evernote.convertTextToTimestamp(item.created, @@config.todoist_datetime_format))
+                        Evernote.convert_text_to_timestamp(item.created, @@config.todoist_datetime_format))
                 end
                 processed.push(item.id)  # whether item was added to Evernote or not don't process it again.
             end
@@ -82,6 +78,6 @@ module Everdone
         puts "  #{processed.length - (found.length+excluded.length)} added to Evernote"
         puts "  #{found.length} were already in Evernote"
         puts "  #{excluded.length} were not added as they are in blacklisted Todoist projects"
-        puts "  All time total processed now #{sync.getProcessedTotal()}"
+        puts "  All time total processed now #{sync.get_processed_total()}"
     end
 end

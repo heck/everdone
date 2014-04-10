@@ -9,8 +9,8 @@ require 'everdone/config'
 module Everdone
     class TodoNote
         attr_reader :id, :created, :content
-        def initialize(todoistNote)
-            note = todoistNote
+        def initialize(todoist_note)
+            note = todoist_note
             @id = note['id']
             @created = note['posted']
             @content = note['content']
@@ -19,12 +19,12 @@ module Everdone
 
     class TodoItem
         attr_reader :id, :title, :created, :projects, :project_ids, :labels, :notes
-        def initialize(config, todoistItem, projects, labels)
+        def initialize(config, todoist_item, projects, labels)
             @config = config
-            item = todoistItem
+            item = todoist_item
             @id = item['id']
             @title = item['content']
-            cleanTitle()  # strip off all (known) Todoist detritus
+            clean_title()  # strip off all (known) Todoist detritus
             @created = item['completed_date']
             @projects = []  # Just the parent for now.  TODO: array of projects starting with senior parent and working down to immediate parent
             @projects.push(projects[item['project_id']])
@@ -41,16 +41,16 @@ module Everdone
             }
         end
 
-        def cleanTitle()
+        def clean_title()
             cleaned_title = @title.match(@config.todoist_link_title_regex)
             @title = cleaned_title.nil? ? @title : cleaned_title[1].strip
         end
 
-        def getProjectURL(project_index)
+        def get_project_url(project_index)
             return @config.todoist_project_url + @project_ids[project_index].to_s
         end
 
-        def getLabelURL(label)
+        def get_label_url(label)
             return @config.todoist_label_url + label
         end
     end

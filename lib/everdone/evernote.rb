@@ -32,7 +32,7 @@ module Everdone
             }
         end
 
-        def createNote(title, content, notebook, created)
+        def create_note(title, content, notebook, created)
             new_note = ::Evernote::EDAM::Type::Note.new()
             new_note.notebookGuid = @notebook_guids[notebook]
             new_note.title = title.strip.slice(0..254).scan(/[[:print:]]/).join
@@ -55,7 +55,7 @@ module Everdone
 
         # returns the count of notes within the context:
         #     In the notebook NOTEBOOK_TARGET with tag (if defined) TAG_WITH and having content (if defined) content_text
-        def findNoteCounts(content_text, notebook)
+        def find_note_counts(content_text, notebook)
             filter = ::Evernote::EDAM::NoteStore::NoteFilter.new()
             filter.notebookGuid = @notebook_guids[notebook] if notebook
             filter.tagGuids = [@tag_guid] if @config.tag
@@ -65,8 +65,8 @@ module Everdone
             return !ret.notebookCounts.nil? && notebook && ret.notebookCounts[@notebook_guids[notebook]] ? ret.notebookCounts[@notebook_guids[notebook]] : 0
         end
 
-        def self.convertTextToTimestamp(dateText, dateFormat)
-            ret = DateTime.strptime(dateText, dateFormat).to_time.to_i * 1000
+        def self.convert_text_to_timestamp(dateText, date_format)
+            ret = DateTime.strptime(dateText, date_format).to_time.to_i * 1000
             return ret
         end
     end

@@ -80,12 +80,12 @@ module Everdone
             return self
         end
 
-        def datetimeToString(text, sourceFormat)
-            return DateTime.strptime(text, sourceFormat).new_offset(DateTime.now.offset).strftime(@config.evernote_datetime_format)
+        def datetime_to_string(text, source_format)
+            return DateTime.strptime(text, source_format).new_offset(DateTime.now.offset).strftime(@config.evernote_datetime_format)
         end
 
-        def datetime(text, sourceFormat)
-            @body = @body + self.datetimeToString(text, sourceFormat)
+        def datetime(text, source_format)
+            @body = @body + self.datetime_to_string(text, source_format)
             return self
         end
 

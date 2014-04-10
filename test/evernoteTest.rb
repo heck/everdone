@@ -12,8 +12,8 @@ class EvernoteTest < MiniTest::Unit::TestCase
     end
 
     def test_findNoteCounts
-        assert_equal 0, @evernote.findNoteCounts("%$$%%$^@&& NOT IN EVERNOTE RIGHT? ^^{$^&*", @config.default_notebook)  # should not be found
-        assert_equal 1, @evernote.findNoteCounts("#{@config.todoist_content_tag}4653498", @config.default_notebook)  # known to be
-        assert_equal 0, @evernote.findNoteCounts("#{@config.todoist_content_tag}4653498", nil)  # known but not in this notebook
+        assert_equal 0, @evernote.find_note_counts("%$$%%$^@&& NOT IN EVERNOTE RIGHT? ^^{$^&*", @config.default_notebook)  # should not be found
+        assert_equal 1, @evernote.find_note_counts("#{@config.todoist_content_tag}4653498", @config.default_notebook)  # known to be
+        assert_equal 0, @evernote.find_note_counts("#{@config.todoist_content_tag}4653498", nil)  # known but not in this notebook
     end
 end
