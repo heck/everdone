@@ -1,3 +1,9 @@
+# TODO: Add real error and corner case handling
+# TODO: command line options such as "create user config", "pre-flight test", "dry run", "verbose"
+# TODO: Test on Windows
+# TODO: Templatize Evernote entry format
+# TODO: Allow Todoist content to be in markdown and covert before posting to Evernote
+
 require "everdone/version"
 
 require 'awesome_print'
@@ -76,8 +82,8 @@ module Everdone
 
         puts "INFO: Done! Of #{items.length} found..."
         puts "  #{processed.length - (found.length+excluded.length)} added to Evernote"
-        puts "  #{found.length} were already in Evernote"
-        puts "  #{excluded.length} were not added as they are in blacklisted Todoist projects"
+        puts "  #{found.length} were already in Evernote" if found.length > 0
+        puts "  #{excluded.length} were not added as they are in blacklisted Todoist projects" if excluded.length > 0
         puts "  All time total processed now #{sync.get_processed_total()}"
     end
 end

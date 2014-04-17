@@ -3,9 +3,9 @@
     "tag" : "Todoist",
     "evernote_datetime_format" : "%a %e %b %Y %H:%M",
     "use_evernote_sandbox" : false,
-    "evernote_token" : "<set to your Evernote developer token>",
+    "evernote_token" : "<get from: https://www.evernote.com/api/DeveloperToken.action>",
 
-    "todoist_token" : "<set to your Todoist API token>",
+    "todoist_token" : "<get from your Todoist settings Account tab>",
     "todoist_completed_window" : "past 2 weeks",
     "todoist_datetime_format" : "%a %e %b %Y %H:%M:%S %z",
     "todoist_project_url" : "https://todoist.com/app?v=204#project/",

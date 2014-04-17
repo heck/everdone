@@ -18,7 +18,7 @@ module Everdone
     end
 
     class TodoItem
-        attr_reader :id, :title, :created, :projects, :project_ids, :labels, :notes
+        attr_reader :id, :title, :created, :projects, :project_ids, :labels, :notes, :priority, :due_date
         def initialize(config, todoist_item, projects, labels)
             @config = config
             item = todoist_item
@@ -31,14 +31,18 @@ module Everdone
             @project_ids = []  # Just the parent for now.  TODO: array of project ids starting with senior... (see above)
             @project_ids.push(item['project_id'])
             @labels = []  # arrary of associated labels (random order)
-            item['labels'].each { |labelId|  
+            item['labels'].each { |labelId|
                 @labels.push(labels[labelId])
             }
+            @priority = item['priority']
+            @due_date = item['due_date']
             @notes = []  # array of notes
-            item['notes'].each { |note|  
-                new_note = TodoNote.new(note)
-                @notes.push(new_note)
-            }
+            if not item['notes'].nil?
+                item['notes'].each { |note|
+                    new_note = TodoNote.new(note)
+                    @notes.push(new_note)
+                }
+            end
         end
 
         def clean_title()
