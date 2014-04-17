@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["home@u2me.com"]
   spec.summary       = %q{Syncs completed Todoist items into Evernote}
   spec.description   = %q{Uses Todoist and Evernote web services (and their respective API tokesn) }
-  spec.homepage      = ""
+  spec.homepage      = "http://github.com/heck/everdone"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
