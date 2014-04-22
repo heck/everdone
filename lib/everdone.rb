@@ -6,7 +6,6 @@
 
 require "everdone/version"
 
-require 'awesome_print'
 require 'time'
 
 # Everdone local stuff

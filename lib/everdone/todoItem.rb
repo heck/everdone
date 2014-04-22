@@ -2,8 +2,6 @@
 # TodoItem
 #   Handle mapping a single Todoist itme to something EverTodo can work with
 #
-require 'awesome_print'
-
 require 'everdone/config'
 
 module Everdone

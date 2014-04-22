@@ -1,6 +1,5 @@
 require 'cgi'
 require 'time'
-require 'awesome_print'
 
 require 'everdone/config'
 

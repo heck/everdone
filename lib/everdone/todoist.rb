@@ -1,5 +1,4 @@
 require 'httparty'
-require 'awesome_print'
 
 require 'everdone/config'
 
