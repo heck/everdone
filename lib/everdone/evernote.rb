@@ -44,7 +44,7 @@ module Everdone
                 created_note = @note_store.createNote(@config.evernote_token, new_note)
             rescue => err
                 puts "ERROR: ----------- Evernote exception ------------------!!!"
-                ap err
+                puts err.to_s
                 puts "Note info:"
                 puts "Title: #{title}"
                 puts "Created: #{created}"

@@ -24,7 +24,7 @@ module Everdone
         # from: http://code.tutsplus.com/tutorials/8-regular-expressions-you-should-know--net-6149
         # match only url's that take the form http://..., https://... 
         # but NOT <whatever>@<url> or <host>.<domain>.<tld>
-        URL_REGEX = /((https?:\/\/)([\da-zA-Z\.-]+)\.([a-z\.]{2,6})(:[\d]+)?([\/\w \.?%_&=+-]*)*\/?)/
+        URL_REGEX = /((https?:\/\/)([\da-zA-Z\.-]+)\.([a-z\.]{2,6})(:[\d]+)?([\/\w \.?%,_&=+-]*)*\/?)/
         def rawtext(text)
             # Take text and do some cooking
             #
