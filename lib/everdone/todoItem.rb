@@ -29,9 +29,11 @@ module Everdone
             @project_ids = []  # Just the parent for now.  TODO: array of project ids starting with senior... (see above)
             @project_ids.push(item['project_id'])
             @labels = []  # arrary of associated labels (random order)
-            item['labels'].each { |labelId|
-                @labels.push(labels[labelId])
-            }
+            if not item['labels'].nil?
+                item['labels'].each { |labelId|
+                    @labels.push(labels[labelId])
+                }
+            end
             @priority = item['priority']
             @due_date = item['due_date']
             @notes = []  # array of notes
